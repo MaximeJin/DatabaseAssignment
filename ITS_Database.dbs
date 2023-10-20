@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="ITS_Database" id="Project-adf" database="LogicalDesign" >
+	<schema name="INSTANCE" catalogname="ITS_Database" >
+		<table name="Booking Service Table" prior="Entity" >
+			<column name="booking_reference_number" type="INT" jt="4" mandatory="y" />
+			<column name="start_date" type="DATE" jt="91" mandatory="y" />
+			<column name="end_date" type="DATE" jt="91" mandatory="y" />
+			<column name="pick_up" type="CHAR" length="50" jt="1" mandatory="y" />
+			<column name="drop_off" type="CHAR" length="50" jt="1" mandatory="y" />
+			<column name="start_odometer" type="INT" jt="4" mandatory="y" >
+				<defo><![CDATA[0]]></defo>
+				<comment><![CDATA[Default value of 0
+Assuming odometer values start at 0.]]></comment>
+			</column>
+			<column name="end_odometer" type="INT" jt="4" mandatory="y" />
+			<column name="driver_license_number" type="VARCHAR" length="18" jt="12" mandatory="y" >
+				<comment><![CDATA[Driver's license number, which should be unique for each driver.]]></comment>
+			</column>
+			<column name="official_id" type="INT" jt="4" mandatory="y" >
+				<comment><![CDATA[A unique identifier for each official]]></comment>
+			</column>
+			<index name="pk_Booking Service Table" unique="PRIMARY_KEY" >
+				<column name="booking_reference_number" />
+			</index>
+			<index name="unq_start_odometer" unique="UNIQUE_INDEX" >
+				<column name="start_odometer" />
+			</index>
+			<fk name="fk_Booking Service Table_Driver Info Table" to_schema="ITS_Database.INSTANCE" to_table="Driver Info Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="driver_license_number" pk="license_number" />
+			</fk>
+			<fk name="fk_Booking Service Table_Games Official Table" to_schema="ITS_Database.INSTANCE" to_table="Games Official Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="official_id" pk="official_id" />
+			</fk>
+		</table>
+		<table name="Country Table" prior="Country and Language Table" >
+			<column name="country_id" prior="Country ID" type="INT" jt="4" mandatory="y" />
+			<column name="country_name" prior="Country Name" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="language" type="CHAR" length="50" jt="1" mandatory="y" />
+			<index name="pk_Country and Language Table" unique="PRIMARY_KEY" >
+				<column name="country_id" />
+			</index>
+			<index name="unq_language" unique="UNIQUE_INDEX" >
+				<column name="language" />
+			</index>
+			<fk name="fk_Country and Language Table_Games Official Table" to_schema="ITS_Database.INSTANCE" to_table="Games Official Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="country_id" pk="country_id" />
+			</fk>
+			<fk name="fk_Country Table_Driver Info Table" to_schema="ITS_Database.INSTANCE" to_table="Driver Info Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="language" pk="preferred_language" />
+			</fk>
+			<fk name="fk_Country Table_Games Official Table" to_schema="ITS_Database.INSTANCE" to_table="Games Official Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="language" pk="preferred_language" />
+			</fk>
+		</table>
+		<table name="Driver Info Table" prior="Driver_Table" >
+			<column name="license_number" prior="License Number" type="INT" jt="4" mandatory="y" >
+				<comment><![CDATA[Driver's license number, which should be unique for each driver.]]></comment>
+			</column>
+			<column name="name" prior="Name" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="clearance_level" prior="Clearance Level" type="ENUM" jt="12" mandatory="y" >
+				<enumeration><![CDATA[1,2,3,4]]></enumeration>
+				<comment><![CDATA[Indicates the security clearance level of the driver, which can be digits from 1 to 4.]]></comment>
+			</column>
+			<column name="first_aid_training_level(FATL)" prior="First Aid Training Level (FATL)" type="ENUM" jt="12" >
+				<enumeration><![CDATA[1,2,3,4,5,6,7,8,9,10]]></enumeration>
+				<comment><![CDATA[Stores the level of First Aid Training Licence (FATL) that a driver has passed, ranging from 1 to 10.]]></comment>
+			</column>
+			<column name="security_training_license_vip_transport_level (STLVT)" prior="Security Training Licence for VIP Transport (STLVT) Level" type="ENUM" jt="12" >
+				<enumeration><![CDATA[1,2,3,4,5]]></enumeration>
+				<comment><![CDATA[Indicates the level of Security Training Licence for VIP Transport (STLVT) that a driver has passed, ranging from 1 to 5.]]></comment>
+			</column>
+			<column name="vehicule_id" prior="Vehicule ID" type="INT" jt="4" mandatory="y" />
+			<column name="preferred_language" type="CHAR" length="50" jt="1" mandatory="y" />
+			<index name="pk_Driver_Table" unique="PRIMARY_KEY" >
+				<column name="license_number" />
+			</index>
+			<index name="unq_preferred_language" unique="UNIQUE_INDEX" >
+				<column name="preferred_language" />
+			</index>
+			<fk name="fk_Driver_Table_Maintenance/Repair Table" to_schema="ITS_Database.INSTANCE" to_table="Maintenance/Repair Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="vehicule_id" pk="vehicule_id" />
+			</fk>
+			<fk name="fk_Driver Info Table_STLVT Table" to_schema="ITS_Database.INSTANCE" to_table="STLVT Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="license_number" pk="license_number" />
+			</fk>
+			<fk name="fk_Driver Info Table_FATL Table" to_schema="ITS_Database.INSTANCE" to_table="FATL Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="license_number" pk="license_number" />
+			</fk>
+		</table>
+		<table name="FATL Table" prior="Entity" >
+			<column name="FATL_level" prior="FATL Level" type="ENUM" jt="12" >
+				<enumeration><![CDATA[1,2,3,4,5,6,7,8,9,10]]></enumeration>
+			</column>
+			<column name="FATL_qualification_date" prior="FATL Qualification Date" type="DATE" jt="91" />
+			<column name="license_number" type="INT" jt="4" mandatory="y" >
+				<comment><![CDATA[Driver's license number, which should be unique for each driver.]]></comment>
+			</column>
+			<index name="pk_license_number" unique="PRIMARY_KEY" >
+				<column name="license_number" />
+			</index>
+		</table>
+		<table name="Games Official Table" prior="Official ID" >
+			<column name="official_id" prior="Official ID" type="INT" jt="4" mandatory="y" >
+				<comment><![CDATA[A unique identifier for each official]]></comment>
+			</column>
+			<column name="incheon_city_id" prior="Incheon City ID" type="VARCHAR" length="8" jt="12" mandatory="y" />
+			<column name="official_name" prior="Official Name" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="role_at_incheon_game" prior="Role at Incheon Games" type="ENUM" jt="12" mandatory="y" >
+				<enumeration><![CDATA["coach","judge","physician"]]></enumeration>
+				<comment><![CDATA[The role or position of the official at the Incheon Games (e.g., coach, judge, physician).]]></comment>
+			</column>
+			<column name="country_id" prior="Country ID" type="INT" jt="4" mandatory="y" />
+			<column name="preferred_language" type="CHAR" length="50" jt="1" mandatory="y" />
+			<index name="unq_Country ID" unique="UNIQUE_INDEX" >
+				<column name="country_id" />
+			</index>
+			<index name="pk_Games Official Table" unique="PRIMARY_KEY" >
+				<column name="official_id" />
+			</index>
+			<index name="unq_preferred_language" unique="UNIQUE_INDEX" >
+				<column name="preferred_language" />
+			</index>
+		</table>
+		<table name="Maintenance/Repair Table" prior="Entity" >
+			<column name="vehicule_id" prior="Vehicule ID" type="INT" jt="4" mandatory="y" />
+			<column name="odometer" prior="Odometer" type="INT" jt="4" mandatory="y" >
+				<defo><![CDATA[0]]></defo>
+				<comment><![CDATA[Default value of 0
+Assuming odometer values start at 0.]]></comment>
+			</column>
+			<column name="action_type" prior="Action Type" type="ENUM" jt="12" mandatory="y" >
+				<enumeration><![CDATA['M', 'R']]></enumeration>
+				<comment><![CDATA[This field indicates whether the action is a maintenance or repair operation.
+"M" for Maintenance and "R" for Repair.]]></comment>
+			</column>
+			<column name="final_cost" prior="Final Cost" type="DECIMAL" length="100" decimal="2" jt="3" mandatory="y" />
+			<column name="description" prior="Description" type="TEXT" jt="-1" mandatory="y" >
+				<comment><![CDATA[Brief description of the maintenance or repair action]]></comment>
+			</column>
+			<column name="date" prior="Date" type="DATETIME" jt="93" mandatory="y" >
+				<defo><![CDATA[systimestamp]]></defo>
+			</column>
+			<index name="unq_Vehicule ID" unique="UNIQUE_INDEX" >
+				<column name="vehicule_id" />
+			</index>
+			<index name="pk_Maintenance/Repair Table" unique="PRIMARY_KEY" >
+				<column name="vehicule_id" />
+			</index>
+			<fk name="fk_Maintenance/Repair Table_Vehicle Table" to_schema="ITS_Database.INSTANCE" to_table="Vehicle Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="odometer" pk="current_odometer" />
+			</fk>
+		</table>
+		<table name="STLVT Table" prior="STLVT" >
+			<column name="STVLT_level" prior="STVLT Level" type="ENUM" jt="12" >
+				<enumeration><![CDATA[1,2,3,4,5]]></enumeration>
+			</column>
+			<column name="STLVT_qualification_date" prior="Qualification Date" type="DATE" jt="91" />
+			<column name="certifying_authority" prior="Certifying Authority" type="ENUM" jt="12" >
+				<enumeration><![CDATA['local police station', 'foreign police station']]></enumeration>
+			</column>
+			<column name="license_number" type="INT" jt="4" mandatory="y" >
+				<comment><![CDATA[Driver's license number, which should be unique for each driver.]]></comment>
+			</column>
+			<index name="pk_license_number" unique="PRIMARY_KEY" >
+				<column name="license_number" />
+			</index>
+		</table>
+		<table name="Vehicle Table" prior="Vehicle" >
+			<column name="vehicule_id" prior="Vehicule ID" type="INT" jt="4" mandatory="y" />
+			<column name="registration_id" prior="Registration ID" type="VARCHAR" length="7" jt="12" mandatory="y" />
+			<column name="manufacturer" prior="Manufacturer" type="VARCHAR" length="20" jt="12" mandatory="y" >
+				<comment><![CDATA[Manufacturer of the vehicle]]></comment>
+			</column>
+			<column name="model" prior="Model" type="VARCHAR" length="20" jt="12" mandatory="y" >
+				<comment><![CDATA[Model of the vehile]]></comment>
+			</column>
+			<column name="color" prior="Color" type="VARCHAR" length="20" jt="12" mandatory="y" >
+				<comment><![CDATA[Color of the vehicle]]></comment>
+			</column>
+			<column name="current_odometer" prior="Current Odometer" type="INT" jt="4" mandatory="y" >
+				<defo><![CDATA[0]]></defo>
+				<comment><![CDATA[Default value of 0
+Assuming odometer values start at 0.]]></comment>
+			</column>
+			<column name="passenger_capacity" prior="Passenger Capacity" type="INT" jt="4" mandatory="y" />
+			<index name="pk_Vehicle Table" unique="PRIMARY_KEY" >
+				<column name="vehicule_id" />
+			</index>
+			<index name="unq_Current Odometer" unique="UNIQUE_INDEX" >
+				<column name="current_odometer" />
+			</index>
+			<fk name="fk_Vehicle Table_Maintenance/Repair Table" to_schema="ITS_Database.INSTANCE" to_table="Maintenance/Repair Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="vehicule_id" pk="vehicule_id" />
+			</fk>
+			<fk name="fk_Vehicle Table_Booking Service Table" to_schema="ITS_Database.INSTANCE" to_table="Booking Service Table" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="current_odometer" pk="start_odometer" />
+			</fk>
+		</table>
+	</schema>
+	<connector name="MySql" database="MySql" driver_class="com.mysql.cj.jdbc.Driver" driver_jar="mysql-connector-j-8.1.0.jar" driver_desc="Standard" host="localhost" port="3306" user="root" passwd="MTIz" useSystemProxy="false" />
+	<layout name="Default Layout" id="Layout-7a6" show_relation="columns" >
+		<entity schema="ITS_Database.INSTANCE" name="Booking Service Table" color="C1D8EE" x="374" y="68" />
+		<entity schema="ITS_Database.INSTANCE" name="Country Table" color="C1D8EE" x="255" y="578" />
+		<entity schema="ITS_Database.INSTANCE" name="Driver Info Table" color="C1D8EE" x="442" y="357" />
+		<entity schema="ITS_Database.INSTANCE" name="FATL Table" color="C1D8EE" x="952" y="272" />
+		<entity schema="ITS_Database.INSTANCE" name="Games Official Table" color="C1D8EE" x="51" y="374" />
+		<entity schema="ITS_Database.INSTANCE" name="Maintenance/Repair Table" color="C1EEC8" x="918" y="51" />
+		<entity schema="ITS_Database.INSTANCE" name="STLVT Table" color="C1D8EE" x="969" y="459" />
+		<entity schema="ITS_Database.INSTANCE" name="Vehicle Table" color="C1D8EE" x="68" y="85" />
+	</layout>
+</project>
