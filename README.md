@@ -13,43 +13,345 @@ ITS's needs as specified requirements. ITS owns a fleet of vehicles.
 
 ![image](https://github.com/MaximeJin/DatabaseAssignment/assets/99347092/8b6ebac0-3822-486b-9207-eb016c8dee42)
 
-**ITS databse requirements**:
+**Dbschema Database Design File** :
 
-• Vehicles are maintained or repaired regularly. While the vehicle's maintenance or
-repair started, the ITS database stores the action type as Maintenance (M) or
-Repair (R), odometer, the final cost, a brief description of the action and the date.
-• ITS stores a list of countries participating in the Games and the most frequently
-spoken languages. A country can have various spoken languages which are
-identified by ISO3166-1 two-character codes. For instance, ISO3166-1 twocharacter codes for the Republic of Korea and English language are KR and EN,
-respectively. You can find the current ISO 3166 country codes list by clicking here.
-• Games officials from all participating countries use ITS's services. ITS records the
-name of the country that an official is representing, the official's Incheon 8
-characters based City ID, his/her name, role at the Incheon Games (e. g., coach,
-judge and physician), and the official's preferred language.
-• An Incheon Game official may use ITS's services various times during a single
-day; the condition that "a suitable vehicle is available when they wish to travel" is
-the only limiting factor.
-• The ITS database system stores drivers' information, including their name,
-license number (18 characters), and clearance level. An ITS driver's security
-clearance level can be digits from 1 to 4.
-• If an ITS driver has already passed a First Aid Training Licence (FATL), the ITS
-database stores the FATL level (1 to 10) and the FATL qualification date.
-• If an ITS driver has already passed a security training licence for the VIP transport
-(STLVT), the ITS database stores the STLVT level (1 to 5), the STLVT qualification
-date and the certifying authority (e.g., a local Police Station, or foreign police
-station).
-• It is not mandatory for an ITS driver to have a special training licence in one field
-of STLVT, FATL or both.
-• ITS driver booking service matches the language of an Incheon game official with
-the language of the ITS driver.
-• ITS driver booking service matches the assignment of a suitable driver with a
-suitable vehicle based on the Incheon game official's request.
-• ITS driver database system stores the pickup and drops off location name
-incuding location's address such as street number and city, and location types
-such as Hotel, Airport, and Aquatic Center.
-• ITS driver database system stores the booking reference number, the actual trip
-start date-and-time, end date-and-time, start odometer value and end odometer
-value when a trip is completed.
-• To assist vehicle assignment, ITS requires that the new system indicate whether
-a vehicle is currently available. An ITS vehicle is flagged as unavailable if the
-vehicle is out-on-a-trip or out-of-service.
+![image](https://github.com/MaximeJin/DatabaseAssignment/assets/99347092/41675be0-19bd-4d18-937c-6a3e62bd8f01)
+
+On this Database Design, I implemented several tables that contains attributes that meets the ITS Database requirements.
+
+### Booking Service Table:
+
+**booking_reference_number:**
+- Data Type: INTEGER
+- Primary Key: Yes, part of the composite primary key
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**start_date:**
+- Data Type: DATETIME
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**end_date:**
+- Data Type: DATETIME
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**pick_up:**
+- Data Type: VARCHAR or TEXT, depending on the expected length
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**drop_off:**
+- Data Type: VARCHAR or TEXT, depending on the expected length
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**start_odometer:**
+- Data Type: INTEGER
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: 0 (assumes it starts at 0)
+
+**end_odometer:**
+- Data Type: INTEGER
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**driver_license_number:**
+- Data Type: VARCHAR or CHAR, depending on the format
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**official_id:**
+- Data Type: INTEGER
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**Foreign Keys and Relations:**
+- The composite primary key consists of `booking_reference_number`, `driver_license_number`, and `official_id`.
+- `driver_license_number` is a foreign key referencing the `license_number` in the Driver Info Table.
+- `official_id` is a foreign key referencing the `official_id` in the Games Official Table.
+
+### Vehicle Table:
+
+**vehicle_id:**
+- Data Type: INTEGER
+- Primary Key: Yes
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**registration_id:**
+- Data Type: VARCHAR 
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**manufacturer:**
+- Data Type: VARCHAR 
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**model:**
+- Data Type: VARCHAR 
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**color:**
+- Data Type: VARCHAR 
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**current_odometer:**
+- Data Type: INTEGER
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: 0 (assumes it starts at 0)
+
+**passenger_capacity:**
+- Data Type: INTEGER
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**Foreign Keys and Relations:**
+- The `vehicle_id` is the primary key.
+- It is also a foreign key referencing the `vehicule_id` in the Maintenance/Repair Table.
+- The `current_odometer` is a foreign key referencing the `start_odometer` in the Booking Service Table.
+
+### Maintenance/Repair Table:
+
+**vehicle_id:**
+- Data Type: INTEGER
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**odometer:**
+- Data Type: INTEGER
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: 0 (assumes it starts at 0)
+
+**action_type:**
+- Data Type: BYTE with its value being ('M' or 'R')
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**final_cost:**
+- Data Type: NUMERIC
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**description:**
+- Data Type: TEXT 
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**[date]:**
+- Data Type: DATETIME
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: Current timestamp or datetime
+
+**Foreign Keys and Relations:**
+- The composite primary key consists of `vehicle_id` and `odometer`.
+- `vehicle_id` is a foreign key referencing the `vehicule_id` in the Vehicle Table.
+- `current_odometer` in the Vehicle Table is a foreign key referencing the `start_odometer` in the Booking Service Table.
+
+
+### Country Table:
+
+**country_id:**
+- Data Type: INTEGER
+- Primary Key: Yes
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**country_name:**
+- Data Type: VARCHAR 
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**language:**
+- Data Type: VARCHAR 
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**Foreign Keys and Relations:**
+- The `country_id` is the primary key.
+- `country_id` in the Country and Language Table is a foreign key referencing the `country_id` in the Games Official Table.
+- `language` is a foreign key referencing the `preferred_language` in the Driver Info Table.
+- `language` is a foreign key referencing the `preferred_language` in the Games Official Table.
+
+### Games Official Table:
+
+**official_id:**
+- Data Type: INTEGER
+- Primary Key: Yes
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**incheon_city_id:**
+- Data Type: VARCHAR
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**official_name:**
+- Data Type: VARCHAR
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**role_at_incheon_game:**
+- Data Type: ENUM with options (coach, judge, physician)
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**country_id:**
+- Data Type: INTEGER
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**preferred_language:**
+- Data Type: VARCHAR 
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**Foreign Keys and Relations:**
+- The `official_id` is the primary key.
+- `country_id` is a foreign key referencing the `country_id` in the Country and Language Table.
+- `country_id` is a foreign key referencing the `country_id` in the Country and Language Table.
+- `preferred_language` is a foreign key referencing the `preferred_language` in the Country and Language Table.
+- `preferred_language` is a foreign key referencing the `preferred_language` in the Driver Info Table.
+
+
+### Driver Info Table:
+
+**license_number:**
+- Data Type: INTEGER
+- Primary Key: Yes
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**name:**
+- Data Type: VARCHAR
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**clearance_level:**
+- Data Type: BYTE with its value being (1,2,3,4)
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**[first_aid_training_level(FATL)]:**
+- Data Type: BYTE 
+- Primary Key: No
+- Mandatory (Not Null): No
+- Default Value: N/A
+
+**[security_training_license_vip_transport_level_(STLVT)]:**
+- Data Type:  CHAR
+- Primary Key: No
+- Mandatory (Not Null): No
+- Default Value: N/A
+
+**vehicle_id:**
+- Data Type: INTEGER
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**preferred_language:**
+- Data Type: VARCHAR 
+- Primary Key: No
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**Foreign Keys and Relations:**
+- `license_number` is the primary key.
+- `license_number` in the Driver Info Table is a foreign key referencing the `license_number` in the STLVT Table.
+- `license_number` in the Driver Info Table is a foreign key referencing the `license_number` in the FATL Table.
+- `vehicle_id` is a foreign key referencing the `vehicle_id` in the Vehicle Table.
+- `preferred_language` is a foreign key referencing the `preferred_language` in the Country and Language Table.
+
+
+### STLVT Table:
+
+**STLVT_level:**
+- Data Type: CHAR
+- Primary Key: No
+- Mandatory (Not Null): No
+- Default Value: N/A
+
+**STLVT_qualification_date:**
+- Data Type: DATETIME
+- Primary Key: No
+- Mandatory (Not Null): No
+- Default Value: N/A
+
+**certifying_authority:**
+- Data Type: BYTE or CHAR
+- Primary Key: No
+- Mandatory (Not Null): No
+- Default Value: N/A
+
+**license_number:**
+- Data Type: INTEGER
+- Primary Key: Yes
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**Foreign Keys and Relations:**
+- `license_number` is the primary key.
+- `license_number` in the STLVT Table is a foreign key referencing the `license_number` in the Driver Info Table.
+
+### FATL Table:
+
+**FATL_level:**
+- Data Type: BYTE ENUM with its value being (1,2,3,4,5,6,7,8,9,10)
+- Primary Key: No
+- Mandatory (Not Null): No
+- Default Value: N/A
+
+**FATL_qualification_date:**
+- Data Type: DATETIME
+- Primary Key: No
+- Mandatory (Not Null): No
+- Default Value: N/A
+
+**license_number:**
+- Data Type: INTEGER
+- Primary Key: Yes
+- Mandatory (Not Null): Yes
+- Default Value: N/A
+
+**Foreign Keys and Relations:**
+- `license_number` is the primary key.
+- `license_number` in the FATL Table is a foreign key referencing the `license_number` in the Driver Info Table.
+
+  
+
+***Feel free to click on each table and look for the description I might have written on each attributes***
+
