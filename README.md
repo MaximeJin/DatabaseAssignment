@@ -351,7 +351,37 @@ On this Database Design, I implemented several tables that contains attributes t
 - `license_number` is the primary key.
 - `license_number` in the FATL Table is a foreign key referencing the `license_number` in the Driver Info Table.
 
+
   
 
 ***Feel free to click on each table and look for the description I might have written on each attributes***
+
+Note that in the script, 
+
+
+1. **IF an ITS driver has already passed a First Aid Training Licence (FATL):**
+
+   I would insert records into the `FATL_Table` only for drivers who have passed the First Aid Training Licence. If a driver has not passed FATL, there will be no record for them in this table. Here's an example of how I would insert data for a driver who has passed FATL:
+
+   ```sql
+   -- Insert records into FATL Table for drivers who passed FATL
+   INSERT INTO FATL_Table (FATL_level, FATL_qualification_date, FATL_certifying_authority, license_number)
+   VALUES (5, '2022-12-10', 'Local Police Station', 12345);
+   ```
+
+   In this case, the driver with `license_number` 12345 has passed FATL level 5, and the local police station has certified it.
+
+2. **IF an ITS driver has already passed a security training licence for the VIP transport (STLVT):**
+
+   Similarly, I would insert records into the `STLVT_Table` only for drivers who have passed the Security Training Licence for VIP Transport. If a driver has not passed STLVT, there will be no record for them in this table. Here's an example of how I would insert data for a driver who has passed STLVT:
+
+   ```sql
+   -- Insert records into STLVT Table for drivers who passed STLVT
+   INSERT INTO STLVT_Table (STLVT_level, STLVT_qualification_date, STLVT_certifying_authority, license_number)
+   VALUES (1, '2023-02-20', 'Foreign Police Station', 67890);
+   ```
+
+   In this case, the driver with `license_number` 67890 has passed STLVT level 1, and a foreign police station has certified it.
+
+
 
