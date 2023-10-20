@@ -365,8 +365,8 @@ Note that in the script,
 
    ```sql
    -- Insert records into FATL Table for drivers who passed FATL
-   INSERT INTO FATL_Table (FATL_level, FATL_qualification_date, FATL_certifying_authority, license_number)
-   VALUES (5, '2022-12-10', 'Local Police Station', 12345);
+   INSERT INTO FATL_Table (FATL_level, FATL_qualification_date, license_number)
+   VALUES (5, '2022-12-10', 12345);
    ```
 
    In this case, the driver with `license_number` 12345 has passed FATL level 5, and the local police station has certified it.
