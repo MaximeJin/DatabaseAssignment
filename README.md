@@ -19,6 +19,7 @@ ITS's needs as specified requirements. ITS owns a fleet of vehicles.
 
 On this Database Design, I implemented several tables that contains attributes that meets the ITS Database requirements.
 
+
 ### Booking Service Table:
 
 **booking_reference_number:**
@@ -351,8 +352,38 @@ On this Database Design, I implemented several tables that contains attributes t
 - `license_number` is the primary key.
 - `license_number` in the FATL Table is a foreign key referencing the `license_number` in the Driver Info Table.
 
+### ERD Diagram:
 
-  
+To create the ERD diagram for the midterm assignment, I adhered to the specified requirements. I started by creating the main tables, which include Vehicles, Booking_service, Driver_info, and Game_officials. These tables form the core of our diagram, and I defined their attributes based on the assignment document.
+
+Next, I had to determine how to incorporate additional data into the diagram. I made several key decisions:
+
+1. **Maintenance/Repair Table:** I created a table named "Maintenance/Repair Table" to house data related to vehicle maintenance and repair information. This table is linked to the "vehicle table" through a foreign key called "vehicle_id." This approach helps organize and associate maintenance data with specific vehicles.
+
+2. **Driver Information Table:** To avoid duplicate data and null values for attributes like "fatl" and "svlvt," which are not mandatory for ITS drivers, I introduced two additional tables linked to "driver_info." These tables are connected via a foreign key called "driver_id."
+
+
+4. **Country Table:** I created a "country" table linked to a "languages_spoken" table through a foreign key called "country_code." Originally, this setup was intended to facilitate matching game officials and drivers based on their language requirements and home country. However, due to implementation constraints, I opted for a simplified approach by including a "preferred_language" attribute in the "game_official" and "driver_info" tables. This limits the number of possible languages for matching to one.
+
+
+Additionally, for reservation purposes, I included two foreign keys in the "booking_service" table, "driver_id" and "official_id," to define constraints and ensure accurate bookings. These foreign keys establish relationships between reservations and the respective drivers and game officials.
+
+### Tables Insertion :
+
+I created insert scripts for the tables, building on the syntax I had used in the previous assignment. I tailored these scripts to match our current set of tables, their attributes, and the specific values required. It was essential to choose meaningful values for each table to ensure that all the assignment requirements were met. These values had to adhere to the initial constraints defined in the table creation scripts.
+
+Once the data was inserted, I verified the success of the inserts by displaying the content of the tables. This step was not only essential for ensuring the correctness of the data but also a requirement outlined in the assignment.
+
+### Table requirements :
+
+Towards the end of the project, I attempted to fulfill two specific requirements:
+
+1. Matching Language Requirements: One requirement involved ensuring that the spoken language of a driver matched that of the game official. I created an SQL script that seemed correct and worked in my SQL developer environment. However, I encountered issues when trying to implement constraints using the sqlite3 package. The objective was to add a constraint to the "booking_service" table, validating whether the preferred language of the official matched the driver's language. I used a join operation to achieve this.
+
+2. Meeting Official's Requests: The other requirement focused on fulfilling the requests made by game officials by aligning them with selected drivers and vehicles. This alignment ensured that the chosen vehicle and driver met the specific requests of the official. Unfortunately, I faced the same constraint-related issue with sqlite3. Nevertheless, the core principle of the request remained the same.
+
+In summary, while I successfully created the SQL scripts to address these requirements, I encountered difficulties when attempting to implement constraints within the sqlite3 environment.
+
 
 ***Feel free to click on each table and look for the description I might have written on each attributes***
 
