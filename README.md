@@ -41,13 +41,13 @@ On this Database Design, I implemented several tables that contains attributes t
 - Default Value: N/A
 
 **pick_up:**
-- Data Type: VARCHAR or TEXT, depending on the expected length
+- Data Type: VARCHAR 
 - Primary Key: No
 - Mandatory (Not Null): Yes
 - Default Value: N/A
 
 **drop_off:**
-- Data Type: VARCHAR or TEXT, depending on the expected length
+- Data Type: VARCHAR 
 - Primary Key: No
 - Mandatory (Not Null): Yes
 - Default Value: N/A
@@ -65,7 +65,7 @@ On this Database Design, I implemented several tables that contains attributes t
 - Default Value: N/A
 
 **driver_license_number:**
-- Data Type: VARCHAR or CHAR, depending on the format
+- Data Type: VARCHAR 
 - Primary Key: No
 - Mandatory (Not Null): Yes
 - Default Value: N/A
